@@ -7,24 +7,22 @@ Dimensions, AsyncStorage } from 'react-native';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
-export default class Login extends Component {
+export default class Register extends Component {
 
   constructor(props){
     super(props);
 
     this.state = {
-      username:'minna123',
-      password:'123'
     };
     
   }
 
   _onRegisterPressed = () => {
-    this.props.navigation.navigate("Register",{screen: "Register"});
+    this.props.navigation.navigate("Login",{screen: "Login"});
   }
 
   _onLoginPressed = () => {
-    this.props.navigation.navigate("Drawer",{screen: "Drawer"});
+    alert("Register");
   }
 
   render() {
@@ -36,17 +34,44 @@ export default class Login extends Component {
 
           <Image
             source={require('../../assets/images/logo.png')} 
-            style={{width: width / 1.2, height: height / 3.5, resizeMode: 'contain', marginTop: -120}}
+            style={{width: width / 2.2, height: height / 3.5, resizeMode: 'contain', marginTop: -120}}
           />
         
-          <TextInput
-            style={styles.textinputs}
+          {/* <TextInput
+            style={[styles.textinputs, style={marginTop: -20}]}
             placeholder="Username"
             placeholderTextColor='grey'
             // value={this.state.mobileNumber}
             onChangeText={(text) => this.setState({username:text})}
 
+          /> */}
+
+          <TextInput
+            style={[styles.textinputs, style={marginTop: -10}]}
+            placeholder="Firstname"
+            placeholderTextColor='grey'
+            // value={this.state.mobileNumber}
+            onChangeText={(text) => this.setState({firstname:text})}
+
           />
+
+          <TextInput
+            style={styles.textinputs}
+            placeholder="Lastname"
+            placeholderTextColor='grey'
+            // value={this.state.mobileNumber}
+            onChangeText={(text) => this.setState({lastname:text})}
+
+          />   
+
+          <TextInput
+            style={styles.textinputs}
+            placeholder="Mobile number"
+            placeholderTextColor='grey'
+            // value={this.state.mobileNumber}
+            onChangeText={(text) => this.setState({mobile:text})}
+
+          />    
 
           <TextInput
             style={styles.textinputs}
@@ -57,25 +82,21 @@ export default class Login extends Component {
             onChangeText={(text) => this.setState({password:text})}
           />
 
-          <View style={{flexDirection: 'row', width: width / 1.1, marginTop: 40}}>
-            <View style={{alignSelf: 'flex-start', width: '66%', marginTop: 15}}>
-                <Text style={{color: '#f5821b', marginLeft: 5}}>Forgot Password?</Text>
-            </View>
-            <View style={{alignContent: 'flex-end', marginLeft: 18}}>
+          
+            <View style={{marginLeft: 18, alignItems: 'center', alignSelf: 'center', marginTop: 20}}>
                 <TouchableOpacity 
                     style={styles.button}
                     onPress={this._onLoginPressed}
                 >
-                    <Text style={{color: '#f5821b', padding: 7, fontSize: 28, fontWeight: 'bold'}}>SIGN IN</Text>
+                    <Text style={{color: '#f5821b', padding: 7, fontSize: 28, fontWeight: 'bold'}}>SIGN UP</Text>
                 </TouchableOpacity>
-            </View>
           </View>
 
 
-          <View style={{flexDirection: 'row', marginTop: 20}}>
-            <Text style={{marginTop: '5%'}}>Don't have an account?</Text>
-            <Text style={{color: '#f5821b',marginTop: '5%', marginLeft: '1%'}}
-            onPress={this._onRegisterPressed}>Signup here</Text>
+          <View style={{flexDirection: 'row', marginTop: 5}}>
+            <Text style={{marginTop: '3%'}}>Already a member?</Text>
+            <Text style={{color: '#f5821b',marginTop: '3%', marginLeft: '1%'}}
+            onPress={this._onRegisterPressed}>Signin here</Text>
             {/* this.props.navigation.navigate("Register",{screen: "Register"}); */}
           </View>
 
@@ -129,19 +150,17 @@ const styles = StyleSheet.create({
   },
   textinputs: {
     backgroundColor: 'white',
-    paddingTop: '2%',
-    paddingBottom: '2%',
     paddingLeft: '4%',
     paddingRight: '4%',
     width: '90%',
-    margin: '3%',
+    margin: '2%',
     color: 'grey',
     height: '8%', 
     borderBottomColor: 'lightgrey',
     borderBottomWidth: 1,
   },
   button: {
-    width: width / 3.5,
+    width: width / 3,
     alignSelf: 'center',
   },
   buttonBottom: {

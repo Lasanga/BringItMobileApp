@@ -7,3 +7,4 @@ import App from './components/Navigation/MainContainer';
 import {name as appName} from './app.json';
 
 AppRegistry.registerComponent(appName, () => App);
+console.disableYellowBox = true;
