@@ -83,7 +83,7 @@ export default class Splash extends Component {
       /> */}
          
         <Image 
-          source={require('../assets/images/logo.png')}
+          source={require('../../assets/images/logo.png')}
           style={{position: 'absolute', width: width / 1.1, height: height / 3.7, paddingBottom: 15, resizeMode: 'contain'}}
         />
 

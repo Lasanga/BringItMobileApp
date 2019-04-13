@@ -17,10 +17,11 @@ import {
 import { StackNavigator, DrawerNavigator, DrawerItems, createDrawerNavigator, createStackNavigator } from 'react-navigation';
 import {Icon} from 'react-native-elements';
 
-import Splash from '../screens/Splash';
+import Splash from '../screens/Welcome/Splash';
 import Login from '../screens/Auth/Login';
 import Register from '../screens/Auth/Register';
 import Home from '../screens/Home/Home';
+import Menu from '../screens/Home/Menu';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -128,6 +129,7 @@ const NavigationApp = StackNavigator({
   Register:{ screen: Register, navigationOptions: { title: 'Register', header: null ,gesturesEnabled:false},},
   Drawer:{ screen: Drawer, navigationOptions: { title: 'Drawer', header: null ,gesturesEnabled:false},},
   Home: { screen: Home, navigationOptions: { title: 'Home', header: null ,gesturesEnabled:false},},
+  Menu: { screen: Menu, navigationOptions: { title: 'Menu', header: null ,gesturesEnabled:false},},
 
 });
 
