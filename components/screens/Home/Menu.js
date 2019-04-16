@@ -6,6 +6,8 @@ Dimensions, AsyncStorage, ScrollView, Picker } from 'react-native';
 import {SearchBar, Card, Icon, Header, Button} from 'react-native-elements';
 import RF from 'react-native-responsive-fontsize';
 
+import apiRest from '../../API/restaurant.json';
+
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
@@ -15,14 +17,18 @@ export default class Menu extends Component {
     super(props);
 
     this.state = {
+
       restaurantName: this.props.navigation.state.params.restaurantName,
       filterMenu: '',
       orderDetails: false,
       orderDetailsSize: '',
-      orderDetailsQuantity: ''
+      orderDetailsQuantity: '',
+      restaurantId: this.props.navigation.state.params.restaurantId
+
     };
     
   }
+
 
   _placeOrderEdit = () => {
     this.setState({orderDetails: true});
@@ -35,6 +41,8 @@ export default class Menu extends Component {
   _orderDetailsSize_Regular = () => {
     this.setState({orderDetailsSize: 'Regular'});
   }
+
+  
 
   render() {
 
@@ -88,6 +96,7 @@ export default class Menu extends Component {
         <View>
 
           <Card containerStyle={{borderRadius: 5}}>
+
             <View style={{flexDirection: 'row'}}>
 
               <Image 
@@ -100,84 +109,66 @@ export default class Menu extends Component {
                 <Text style={{marginTop: 10, fontSize: RF(3)}}>Rs. 590</Text>
               </View>
 
-              <TouchableOpacity 
-                style={{justifyContent:'center'}}
-                onPress={this._placeOrderEdit}
-              >
-                <Image
-                  style={{width: width / 7, height: height / 25, resizeMode: 'contain', borderRadius: 10}} 
-                  source={{uri: 'https://cdn3.iconfinder.com/data/icons/shopping-2/256/Add_to_Cart-512.png'}} 
-                />
-              </TouchableOpacity>
-
             </View>
-          </Card>
 
-          { 
-            
-            this.state.orderDetails 
-            
-            ? 
+            <View style={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'}}>
 
-            <Card style={{marginTop: 0}}>
-              <View style={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'}}>
                 <View style={{width: width / 1.4}}>
-                  <View style={{flexDirection: 'row', marginBottom: 20, justifyContent: 'center'}}>
-                    <Text>Size</Text>
-                    <Button 
-                      title="Regular" 
-                      buttonStyle={[styles.orderDetailsSize]}
-                      textStyle={{ fontSize: RF(1.8)}}
-                      onPress={this._orderDetailsSize_Regular}
-                    />
-                    <Button 
-                      title="Large" 
-                      buttonStyle={[styles.orderDetailsSize]}
-                      textStyle={{ fontSize: RF(1.8)}}
-                    />
-                  </View>
-                  
-                  <View style={{flexDirection: 'row', marginBottom: 25, justifyContent: 'center'}}>
-                    <Text style={{marginRight: 10}}>Quantity</Text>
-                    <Button 
-                      buttonStyle={[styles.orderDetailsQuantity]}
-                      textStyle={{ fontSize: RF(1.8)}}
-                      icon={{name: 'remove', color: 'grey'}}
-                    />
-                    <Text>1</Text>
-                    <Button 
-                      buttonStyle={[styles.orderDetailsQuantity, {marginLeft: 6}]}
-                      textStyle={{ fontSize: RF(1.8)}}
-                      icon={{name: 'add', color: 'grey'}}
-                    />
+
+                  <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 20}}>
+
+                    <Picker
+                      selectedValue={this.state.dayFromPicker}
+                      style={{ width: width / 2.5, fontSize: RF(0.8) }}
+                      onValueChange={(itemValue, itemIndex) =>
+                          this.setState({dayFromPicker: itemValue})
+                      }
+                    >
+                        <Picker.Item label="Pick a size" value="0" />
+                        <Picker.Item label="Regular" value="Regular" />
+                        <Picker.Item label="Large" value="Large" />
+                    </Picker>
+
+                    <View style={{flexDirection: 'row', justifyContent:'center', marginLeft: 20}}>
+                      
+                      <TouchableOpacity 
+                        style={styles.quantityBtns}
+                        onPress={this._placeOrderEdit}
+                      >
+                        <Icon name='remove' color='grey'/>
+                      </TouchableOpacity>
+
+                      <View style={{ marginHorizontal: 15, justifyContent: 'center', alignItems: 'center', height: 40 }}>
+                        <Text style={{ fontSize: RF(2.5) }}>
+                          10
+                        </Text>
+                      </View>
+
+                      <TouchableOpacity 
+                        style={styles.quantityBtns}
+                        onPress={this._placeOrderEdit}
+                      >
+                       <Icon name="add" color='grey'/>
+                      </TouchableOpacity>
+
+                    </View>
+
+
                   </View>
 
                 </View>
+
+                  <TouchableOpacity 
+                    style={styles.cardViewBtn}
+                  >
+                    <Text style={{ fontSize: RF(1.8), color: 'orange' }}>Add to Cart</Text>
+                  </TouchableOpacity>
+
                
               </View>
 
-              <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-                <Button 
-                  title="Cancel" 
-                  buttonStyle={[styles.orderCardPromptBtns, {borderColor: 'red'}]}
-                  textStyle={{ fontSize: RF(2), color: 'red' }}
-                  onPress={this._cancelOrderDetails}
-                />
-                <Button 
-                  title="Confirm"
-                  buttonStyle={[styles.orderCardPromptBtns, {borderColor: 'green'}]}
-                  textStyle={{ fontSize: RF(2), color: 'green' }}
-                />
-              </View>
-            </Card>
-            
-            :
+          </Card>
 
-            <View></View>
-
-          }
-
-          
         
         </View>
 
@@ -220,6 +211,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     backgroundColor: 'white',
     borderRadius: 50
+  },
+  quantityBtns: {
+    width: 38,
+    height: 38,
+    borderRadius: 50,
+    elevation: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  cardViewBtn: {
+    width: width / 5.5,
+    padding: 3,
+    borderRadius: 50,
+    marginTop: 10,
+    backgroundColor: 'transparent',
+    borderWidth: 0.5,
+    borderColor: 'orange',
+    alignItems: 'center'
   }
 
   
