@@ -46,7 +46,7 @@ export default class Register extends Component {
 
           /> */}
 
-          <TextInput
+          {/* <TextInput
             style={[styles.textinputs, style={marginTop: -10}]}
             placeholder="Firstname"
             placeholderTextColor='grey'
@@ -62,7 +62,7 @@ export default class Register extends Component {
             // value={this.state.mobileNumber}
             onChangeText={(text) => this.setState({lastname:text})}
 
-          />   
+          />    */}
 
           <TextInput
             style={styles.textinputs}
@@ -80,6 +80,15 @@ export default class Register extends Component {
             secureTextEntry={true}
             // value={this.state.password}
             onChangeText={(text) => this.setState({password:text})}
+          />
+
+          <TextInput
+            style={styles.textinputs}
+            placeholder="Re-enter Password"
+            placeholderTextColor='grey'
+            secureTextEntry={true}
+            // value={this.state.password}
+            onChangeText={(text) => this.setState({repass:text})}
           />
 
           

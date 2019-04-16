@@ -6,6 +6,8 @@ Dimensions, AsyncStorage, ScrollView } from 'react-native';
 import {SearchBar, Card, Icon, Header, Button} from 'react-native-elements';
 import RF from 'react-native-responsive-fontsize';
 
+import apiRest from '../../API/restaurant.json';
+
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
@@ -17,9 +19,24 @@ export default class Home extends Component {
     this.state = {
       topBtnColorR: 'orange',
       topBtnColorAll: 'lightgrey',
-      recommendedView: true
+      recommendedView: true,
+      restaurantDetails: [],
+      restaurantId: ''
     };
     
+  }
+
+  componentDidMount()
+  {
+    this.setState({ restaurantDetails: apiRest });
+    // this._getRestaurants();
+  }
+
+
+  _getRestaurants() {
+
+    this.setState({ restaurantName: apiRest.name });
+
   }
 
   recommendedBtn = () => {
@@ -49,6 +66,7 @@ export default class Home extends Component {
 
         <Header
           leftComponent={{icon:'menu', color:'#595959', onPress: () => this.props.navigation.openDrawer()}}
+          centerComponent={{text: 'Current location here'}}
           rightComponent={{icon: 'notifications', color: '#595959', onPress: () => alert('Hoi')}}
           backgroundColor='transparent'
           outerContainerStyles={{height: RF(6), borderBottomColor: 'transparent', paddingBottom: 3}}
@@ -87,48 +105,33 @@ export default class Home extends Component {
         
             <ScrollView>
 
-              <Card
-                image={require('../../assets/images/Home/mcDonalds.jpg')}
-                containerStyle={{width: width / 1.1}}
-              >
-                <Text>McDonald's - Nugegoda</Text>
-                <Button 
-                  title="View more" 
-                  buttonStyle={styles.cardViewBtn} 
-                  textStyle={{fontSize: RF(1.5), color: 'orange'}}
-                  onPress={() => navigate('Menu', {restaurantName: 'Mc'})}
-                >
-                </Button>
-              </Card>
+            {
+            this.state.restaurantDetails.map((item, index) => {
+              const url = item.url;
+              return (
 
               <Card
-                image={require('../../assets/images/Home/burgerking.jpg')}
-                containerStyle={{width: width / 1.1}}
+                image={{uri: url}}
+                containerStyle={{width: width / 1.1, borderRadius: 5}}
+                key={index}
               >
-                <Text>Burger King - Nugegoda</Text>
-                <Button 
-                  title="View more" 
-                  buttonStyle={styles.cardViewBtn} 
-                  textStyle={{fontSize: RF(1.5), color: 'orange'}}
-                  onPress={() => navigate('Menu', {restaurantName: 'Burger King'})}
+
+                <Text>{item.name}</Text>
+
+                <TouchableOpacity 
+                  style={styles.cardViewBtn}
+                  onPress={() => navigate('Menu', {restaurantId: item.id})}
                 >
-                </Button>
+
+                  <Text style={{ fontSize: RF(1.8), color: 'orange' }}>View more</Text>
+
+                </TouchableOpacity>
+
               </Card>
 
-              <Card
-                image={require('../../assets/images/Home/mcDonalds.jpg')}
-                containerStyle={{width: width / 1.1}}
-                
-              >
-                <Text>McDonald's - Nugegoda</Text>
-                <Button 
-                  title="View more" 
-                  buttonStyle={styles.cardViewBtn} 
-                  textStyle={{fontSize: RF(1.5), color: 'orange'}}
-                  onPress={this.toMenu}
-                >
-                </Button>
-              </Card>
+              );
+              
+            })}
 
             </ScrollView>
 
@@ -138,17 +141,18 @@ export default class Home extends Component {
 
               <Card
                 image={require('../../assets/images/Home/mcDonalds.jpg')}
-                containerStyle={{width: width / 1.1}}
-                
+                containerStyle={{width: width / 1.1, borderRadius: 5}}
               >
+
                 <Text>McDonald's - Nugegoda</Text>
-                <Button 
-                  title="View more" 
-                  buttonStyle={styles.cardViewBtn} 
-                  textStyle={{fontSize: RF(1.5), color: 'orange'}}
-                  onPress={this.toMenu}
+
+                <TouchableOpacity 
+                  style={styles.cardViewBtn}
+                  onPress={() => navigate('Menu', {restaurantName: 'Burger King'})}
                 >
-                </Button>
+                  <Text style={{ fontSize: RF(1.8), color: 'orange' }}>View more</Text>
+                </TouchableOpacity>
+
               </Card>
               
 
@@ -176,11 +180,11 @@ const styles = StyleSheet.create({
     width: width / 5.5,
     padding: 3,
     borderRadius: 50,
-    marginLeft: -10,
     marginTop: 10,
     backgroundColor: 'transparent',
     borderWidth: 0.5,
-    borderColor: 'orange'
+    borderColor: 'orange',
+    alignItems: 'center'
   }
   
 });
