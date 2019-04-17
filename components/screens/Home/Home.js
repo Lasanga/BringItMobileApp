@@ -7,6 +7,7 @@ import {SearchBar, Card, Icon, Header, Button} from 'react-native-elements';
 import RF from 'react-native-responsive-fontsize';
 
 import apiRest from '../../API/restaurant.json';
+import apiRecRest from '../../API/recomRest.json';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -21,6 +22,7 @@ export default class Home extends Component {
       topBtnColorAll: 'lightgrey',
       recommendedView: true,
       restaurantDetails: [],
+      recomRest: [],
       restaurantId: ''
     };
     
@@ -29,6 +31,7 @@ export default class Home extends Component {
   componentDidMount()
   {
     this.setState({ restaurantDetails: apiRest });
+    this.setState({ recomRest: apiRecRest });
     // this._getRestaurants();
   }
 
@@ -106,7 +109,7 @@ export default class Home extends Component {
             <ScrollView>
 
             {
-            this.state.restaurantDetails.map((item, index) => {
+            this.state.recomRest.map((item, index) => {
               const url = item.url;
               return (
 
@@ -118,6 +121,8 @@ export default class Home extends Component {
 
                 <Text>{item.name}</Text>
 
+               <View style={{ alignSelf: 'flex-end' }}>
+
                 <TouchableOpacity 
                   style={styles.cardViewBtn}
                   onPress={() => navigate('Menu', {restaurantId: item.id})}
@@ -126,6 +131,8 @@ export default class Home extends Component {
                   <Text style={{ fontSize: RF(1.8), color: 'orange' }}>View more</Text>
 
                 </TouchableOpacity>
+
+               </View>
 
               </Card>
 
@@ -139,22 +146,37 @@ export default class Home extends Component {
 
             <ScrollView>
 
+            {
+            this.state.restaurantDetails.map((item, index) => {
+              const url = item.url;
+              return (
+
               <Card
-                image={require('../../assets/images/Home/mcDonalds.jpg')}
+                image={{uri: url}}
                 containerStyle={{width: width / 1.1, borderRadius: 5}}
+                key={index}
               >
 
-                <Text>McDonald's - Nugegoda</Text>
+                <Text>{item.name}</Text>
+
+               <View style={{ alignSelf: 'flex-end' }}>
 
                 <TouchableOpacity 
                   style={styles.cardViewBtn}
-                  onPress={() => navigate('Menu', {restaurantName: 'Burger King'})}
+                  onPress={() => navigate('Menu', {restaurantId: item.id})}
                 >
+
                   <Text style={{ fontSize: RF(1.8), color: 'orange' }}>View more</Text>
+
                 </TouchableOpacity>
 
+               </View>
+
               </Card>
+
+              );
               
+            })}
 
             </ScrollView>
 

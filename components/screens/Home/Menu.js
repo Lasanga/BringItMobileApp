@@ -6,7 +6,7 @@ Dimensions, AsyncStorage, ScrollView, Picker } from 'react-native';
 import {SearchBar, Card, Icon, Header, Button} from 'react-native-elements';
 import RF from 'react-native-responsive-fontsize';
 
-import apiRest from '../../API/restaurant.json';
+import apiMenu from '../../API/menu.json';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -23,8 +23,9 @@ export default class Menu extends Component {
       orderDetails: false,
       orderDetailsSize: '',
       orderDetailsQuantity: '',
-      restaurantId: this.props.navigation.state.params.restaurantId
-
+      restaurantId: this.props.navigation.state.params.restaurantId,
+      itemId: '12',
+      menuDetails: []
     };
     
   }
@@ -42,6 +43,14 @@ export default class Menu extends Component {
     this.setState({orderDetailsSize: 'Regular'});
   }
 
+  _addToCart = () => {
+    this.props.navigation.navigate('Order', { itemId: [this.state.itemId] });
+  }
+
+  componentDidMount()
+  {
+    this.setState({menuDetails: apiMenu});
+  }
   
 
   render() {
@@ -78,100 +87,46 @@ export default class Menu extends Component {
             buttonStyle={{width: width / 4.2, padding: 3, elevation: 3, borderRadius: 5, backgroundColor: 'orange'}} />
         </View>
 
-        {/* <View style={{flexDirection: 'row', maxWidth: width, justifyContent: 'center', flexWrap: 'wrap'}}>
-            <Card containerStyle={styles.card}>
-                <Text>Appetizers</Text>
-            </Card>
-            <Card containerStyle={styles.card}>
-                <Text>Main</Text>
-            </Card>
-            <Card containerStyle={styles.card}>
-                <Text>Desert</Text>
-            </Card>
-            <Card containerStyle={styles.card}>
-                <Text>Beverages</Text>
-            </Card>
-        </View> */}
+        {
+            this.state.menuDetails.map((item, index) => {
+              const url = item.url;
+              return (
 
-        <View>
+                <View>
 
-          <Card containerStyle={{borderRadius: 5}}>
+                  <Card containerStyle={{borderRadius: 5}} key="index">
 
-            <View style={{flexDirection: 'row'}}>
+                    <View style={{flexDirection: 'row'}}>
 
-              <Image 
-                style={{width: width / 3, height: height / 10, resizeMode: 'contain', borderRadius: 10}} 
-                source={{uri: 'http://www.pulse.lk/wp-content/uploads/2015/10/IMG_1294.jpg'}} 
-              />
+                      <Image 
+                        style={{width: width / 3, height: height / 10, resizeMode: 'contain', borderRadius: 10}} 
+                        source={{uri: url }} 
+                      />
 
-              <View style={{width: width / 2.4}}>
-                <Text>Hot Butter Cuttlefish</Text>
-                <Text style={{marginTop: 10, fontSize: RF(3)}}>Rs. 590</Text>
-              </View>
-
-            </View>
-
-            <View style={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'}}>
-
-                <View style={{width: width / 1.4}}>
-
-                  <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 20}}>
-
-                    <Picker
-                      selectedValue={this.state.dayFromPicker}
-                      style={{ width: width / 2.5, fontSize: RF(0.8) }}
-                      onValueChange={(itemValue, itemIndex) =>
-                          this.setState({dayFromPicker: itemValue})
-                      }
-                    >
-                        <Picker.Item label="Pick a size" value="0" />
-                        <Picker.Item label="Regular" value="Regular" />
-                        <Picker.Item label="Large" value="Large" />
-                    </Picker>
-
-                    <View style={{flexDirection: 'row', justifyContent:'center', marginLeft: 20}}>
-                      
-                      <TouchableOpacity 
-                        style={styles.quantityBtns}
-                        onPress={this._placeOrderEdit}
-                      >
-                        <Icon name='remove' color='grey'/>
-                      </TouchableOpacity>
-
-                      <View style={{ marginHorizontal: 15, justifyContent: 'center', alignItems: 'center', height: 40 }}>
-                        <Text style={{ fontSize: RF(2.5) }}>
-                          10
-                        </Text>
+                      <View style={{width: width / 2.4}}>
+                        <Text>{ item.name }</Text>
+                        <Text style={{marginTop: 10, fontSize: RF(3)}}>Rs. 590</Text>
                       </View>
 
+                    </View>
+
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+
                       <TouchableOpacity 
-                        style={styles.quantityBtns}
-                        onPress={this._placeOrderEdit}
+                        style={styles.cardViewBtn}
+                        onPress={this._addToCart}
                       >
-                       <Icon name="add" color='grey'/>
+                        <Text style={{ fontSize: RF(1.8), color: 'orange' }}>Order</Text>
                       </TouchableOpacity>
 
                     </View>
 
-
-                  </View>
+                  </Card>
 
                 </View>
-
-                  <TouchableOpacity 
-                    style={styles.cardViewBtn}
-                  >
-                    <Text style={{ fontSize: RF(1.8), color: 'orange' }}>Add to Cart</Text>
-                  </TouchableOpacity>
-
-               
-              </View>
-
-          </Card>
-
-        
-        </View>
-
+              
+              );
+            })}
 
       </View>
     );
