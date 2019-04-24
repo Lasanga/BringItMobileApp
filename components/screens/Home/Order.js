@@ -24,7 +24,11 @@ export default class Order extends Component {
     //   orderDetailsSize: '',
     //   orderDetailsQuantity: '',
     //   restaurantId: this.props.navigation.state.params.restaurantId
-    itemId: this.props.navigation.state.params.itemId
+    itemId: this.props.navigation.state.params.itemId,
+    itemQuantity: 1,
+    buttonDisable: true,
+    itemPrice: '',
+    itemPriceSum: ''
 
     };
     
@@ -43,9 +47,30 @@ export default class Order extends Component {
     this.setState({orderDetailsSize: 'Regular'});
   }
 
+  _decreaseQuanity = () => {
+    if(this.state.itemQuantity == 1)
+    {
+        this.setState({buttonDisable: true});
+
+    }else if(this.state.itemQuantity > 1){
+
+        this.setState({buttonDisable: false});
+        this.setState({itemQuantity: this.state.itemQuantity - 1});
+        this.setState({itemPriceSum: parseInt(this.state.itemPriceSum) - parseInt(this.state.itemPrice) });
+    }
+  }
+
+  _increaseQuantity = () => {
+    this.setState({itemQuantity: this.state.itemQuantity + 1});
+    this.setState({buttonDisable: false});
+    this.setState({itemPriceSum: parseInt(this.state.itemPriceSum) + parseInt(this.state.itemPrice) });
+  }
+
+
   componentDidMount()
   {
-    //   alert(this.state.itemId);
+    this.setState({itemPriceSum: '590'});
+    this.setState({itemPrice: '590'});
   }
   
 
@@ -75,7 +100,7 @@ export default class Order extends Component {
 
               <View style={{width: width / 2.4}}>
                 <Text>Hot Butter Cuttlefish</Text>
-                <Text style={{marginTop: 10, fontSize: RF(3)}}>Rs. 590</Text>
+                <Text style={{marginTop: 10, fontSize: RF(3)}}>Rs. { this.state.itemPriceSum }</Text>
               </View>
 
             </View>
@@ -86,7 +111,7 @@ export default class Order extends Component {
 
                   <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 20}}>
 
-                    <Picker
+                    {/* <Picker
                       selectedValue={this.state.dayFromPicker}
                       style={{ width: width / 2.5, fontSize: RF(0.8) }}
                       onValueChange={(itemValue, itemIndex) =>
@@ -96,26 +121,44 @@ export default class Order extends Component {
                         <Picker.Item label="Pick a size" value="0" />
                         <Picker.Item label="Regular" value="Regular" />
                         <Picker.Item label="Large" value="Large" />
-                    </Picker>
+                    </Picker> */}
 
                     <View style={{flexDirection: 'row', justifyContent:'center', marginLeft: 20}}>
                       
-                      <TouchableOpacity 
-                        style={styles.quantityBtns}
-                        onPress={this._placeOrderEdit}
-                      >
-                        <Icon name='remove' color='grey'/>
-                      </TouchableOpacity>
+                      {
+                        this.state.buttonDisable == true 
+                        
+                        ?  
+
+                        <TouchableOpacity 
+                            style={styles.quantityBtns}
+                            onPress={this._decreaseQuanity}
+                            disabled
+                        >
+                            <Icon name='remove' color='grey'/>
+                        </TouchableOpacity>
+
+                        :
+
+                        <TouchableOpacity 
+                            style={styles.quantityBtns}
+                            onPress={this._decreaseQuanity}
+                        >
+                            <Icon name='remove' color='grey'/>
+                        </TouchableOpacity>
+                      
+                      }
+                    
 
                       <View style={{ marginHorizontal: 15, justifyContent: 'center', alignItems: 'center', height: 40 }}>
                         <Text style={{ fontSize: RF(2.5) }}>
-                          10
+                          { this.state.itemQuantity }
                         </Text>
                       </View>
 
                       <TouchableOpacity 
                         style={styles.quantityBtns}
-                        onPress={this._placeOrderEdit}
+                        onPress={this._increaseQuantity}
                       >
                        <Icon name="add" color='grey'/>
                       </TouchableOpacity>
