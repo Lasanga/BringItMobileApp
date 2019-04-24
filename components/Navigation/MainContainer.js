@@ -125,9 +125,9 @@ const Drawer = DrawerNavigator({
 const NavigationApp = StackNavigator({
 
   //UI Navigation Map For All
-  Splash:{ screen: Splash, navigationOptions: { title: 'SplashScreen', header: null ,gesturesEnabled:false},},
-  Login:{ screen: Login, navigationOptions: { title: 'Login', header: null ,gesturesEnabled:false},},
-  Register:{ screen: Register, navigationOptions: { title: 'Register', header: null ,gesturesEnabled:false},},
+  // Splash:{ screen: Splash, navigationOptions: { title: 'SplashScreen', header: null ,gesturesEnabled:false},},
+  // Login:{ screen: Login, navigationOptions: { title: 'Login', header: null ,gesturesEnabled:false},},
+  // Register:{ screen: Register, navigationOptions: { title: 'Register', header: null ,gesturesEnabled:false},},
   Drawer:{ screen: Drawer, navigationOptions: { title: 'Drawer', header: null ,gesturesEnabled:false},},
   Home: { screen: Home, navigationOptions: { title: 'Home', header: null ,gesturesEnabled:false},},
   Menu: { screen: Menu, navigationOptions: { title: 'Menu', header: null ,gesturesEnabled:false},},
@@ -136,7 +136,6 @@ const NavigationApp = StackNavigator({
 });
 
   
-
 export default class MainContainer extends Component{
 
   constructor(props){
