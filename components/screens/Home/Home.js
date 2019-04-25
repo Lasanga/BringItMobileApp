@@ -5,12 +5,16 @@ import {Platform, StyleSheet, Text, View, Image,TextInput, TouchableHighlight, A
 Dimensions, AsyncStorage, ScrollView } from 'react-native';
 import {SearchBar, Card, Icon, Header, Button} from 'react-native-elements';
 import RF from 'react-native-responsive-fontsize';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import apiRest from '../../API/restaurant.json';
 import apiRecRest from '../../API/recomRest.json';
+// import { O_RDONLY } from 'constants';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
+
+const placeholderImgRestaurant = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNbpeefzFuSk86toTbJOCFij7WQpUACtG-5jIZLo_QAdlFmuF5';
 
 export default class Home extends Component {
 
@@ -23,7 +27,8 @@ export default class Home extends Component {
       recommendedView: true,
       restaurantDetails: [],
       recomRest: [],
-      restaurantId: ''
+      restaurantId: '',
+      loading: false,
     };
     
   }
@@ -33,6 +38,13 @@ export default class Home extends Component {
     this.setState({ restaurantDetails: apiRest });
     this.setState({ recomRest: apiRecRest });
     // this._getRestaurants();
+    this.setState({ loading: true });
+    setInterval(() => {
+      this.setState({
+        //change the state of the laoding in every 3 second
+        loading: false,
+      });
+    }, 3000);
   }
 
 
@@ -88,19 +100,20 @@ export default class Home extends Component {
         <View style={{flexDirection: 'row', justifyContent: 'center', marginVertical: 15}}>
 
           <Button 
-          title="Recommended" 
+          title="Nearby Restaurants" 
           buttonStyle={{width: width / 2.3, borderBottomColor: this.state.topBtnColorR, borderBottomWidth: 5, backgroundColor: 'transparent'}}
           textStyle={{color: 'black'}} 
             onPress={this.recommendedBtn}
           />
 
           <Button 
-          title="All Restaurants" 
+          title="Favorites" 
           buttonStyle={{width: width / 2.3, borderBottomColor: this.state.topBtnColorAll, borderBottomWidth: 5, backgroundColor: 'transparent'}} 
           textStyle={{color: 'black'}}
           onPress={this.allBtn}
           />
         </View>
+
         {
           this.state.recommendedView 
           
@@ -109,30 +122,31 @@ export default class Home extends Component {
             <ScrollView>
 
             {
-            this.state.recomRest.map((item, index) => {
-              const url = item.url;
+            this.state.restaurantDetails.map((item, index) => {
+              {/* const url = item.url; */}
               return (
 
               <Card
-                image={{uri: url}}
-                containerStyle={{width: width / 1.1, borderRadius: 5}}
+                image={{uri: placeholderImgRestaurant}}
+                containerStyle={{width: width / 1.1, borderRadius: 8}}
                 key={index}
               >
 
-                <Text>{item.name}</Text>
+                <Text style={{ fontSize: RF(3) }}>{item.displayName}</Text>
+                <Text style={{ fontSize: RF(2) }}>{item.city}</Text>
 
-               <View style={{ alignSelf: 'flex-end' }}>
+                <View style={{ alignSelf: 'flex-end' }}>
 
-                <TouchableOpacity 
-                  style={styles.cardViewBtn}
-                  onPress={() => navigate('Menu', {restaurantId: item.id})}
-                >
+                  <TouchableOpacity 
+                    style={styles.cardViewBtn}
+                    onPress={() => navigate('Menu', {restaurantId: [item.id], restaurantName: [item.displayName] })}
+                  >
 
-                  <Text style={{ fontSize: RF(1.8), color: 'orange' }}>View more</Text>
+                    <Text style={{ fontSize: RF(1.8), color: 'orange' }}>View more</Text>
 
-                </TouchableOpacity>
+                  </TouchableOpacity>
 
-               </View>
+                </View>
 
               </Card>
 
@@ -148,31 +162,32 @@ export default class Home extends Component {
 
             {
             this.state.restaurantDetails.map((item, index) => {
-              const url = item.url;
+              {/* const url = item.url; */}
               return (
 
-              <Card
-                image={{uri: url}}
-                containerStyle={{width: width / 1.1, borderRadius: 5}}
-                key={index}
-              >
-
-                <Text>{item.name}</Text>
-
-               <View style={{ alignSelf: 'flex-end' }}>
-
-                <TouchableOpacity 
-                  style={styles.cardViewBtn}
-                  onPress={() => navigate('Menu', {restaurantId: item.id})}
+                <Card
+                  image={{uri: placeholderImgRestaurant}}
+                  containerStyle={{width: width / 1.1, borderRadius: 8}}
+                  key={index}
                 >
 
-                  <Text style={{ fontSize: RF(1.8), color: 'orange' }}>View more</Text>
+                <Text style={{ fontSize: RF(3) }}>{item.displayName}</Text>
+                <Text style={{ fontSize: RF(2) }}>{item.city}</Text>
 
-                </TouchableOpacity>
+                <View style={{ alignSelf: 'flex-end' }}>
 
-               </View>
+                  <TouchableOpacity 
+                    style={styles.cardViewBtn}
+                    onPress={() => navigate('Menu', {restaurantId: [item.id], restaurantName: [item.displayName] })}
+                  >
 
-              </Card>
+                    <Text style={{ fontSize: RF(1.8), color: 'orange' }}>View more</Text>
+
+                  </TouchableOpacity>
+
+                </View>
+
+                </Card>
 
               );
               
@@ -180,11 +195,27 @@ export default class Home extends Component {
 
             </ScrollView>
 
-
         }
 
-      
-       
+        <TouchableOpacity
+          style={styles.cartButton}
+          onPress={() => this.props.navigation.navigate("Cart")}
+        >
+          <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingTop: 4 }}>
+            <Icon name="shopping-cart"  size={20} color="#fff" />
+            <Text style={{ marginLeft: 15, color: '#fff' }}>Go to Cart</Text>
+          </View>
+        </TouchableOpacity>
+
+        <Spinner
+          //visibility of Overlay Loading Spinner
+          visible={this.state.loading}
+          //Text with the Spinner 
+          textContent={'Loading...'}
+          //Text style of the Spinner Text
+          textStyle={styles.spinnerTextStyle}
+        />
+
 
       </View>
     );
@@ -207,6 +238,16 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: 'orange',
     alignItems: 'center'
+  },
+  cartButton: {
+    width: width,
+    height: 30,
+    backgroundColor: '#ff5722',
+    borderTopRightRadius: 60,
+    borderTopLeftRadius: 60,
+  },
+  spinnerTextStyle:{
+    color: 'white'
   }
   
 });

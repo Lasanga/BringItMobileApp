@@ -5,11 +5,14 @@ import {Platform, StyleSheet, Text, View, Image,TextInput, TouchableHighlight, A
 Dimensions, AsyncStorage, ScrollView, Picker } from 'react-native';
 import {SearchBar, Card, Icon, Header, Button} from 'react-native-elements';
 import RF from 'react-native-responsive-fontsize';
+import Modal from "react-native-modal";
 
 import apiMenu from '../../API/menu.json';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
+
+const placeholderImg = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNbpeefzFuSk86toTbJOCFij7WQpUACtG-5jIZLo_QAdlFmuF5';
 
 export default class Menu extends Component {
 
@@ -25,7 +28,17 @@ export default class Menu extends Component {
       orderDetailsQuantity: '',
       restaurantId: this.props.navigation.state.params.restaurantId,
       itemId: '12',
-      menuDetails: []
+      menuDetails: [],
+      isAddToCart: false,
+      itemNameForAddToCart: '', 
+      // itemId: this.props.navigation.state.params.itemId,
+      itemQuantity: 1,
+      buttonDisable: true,
+      // itemPrice: this.props.navigation.state.params.itemPrice,
+      itemPriceSum: 750,
+      test: 'test',
+      totalCartPrice: 0
+
     };
     
   }
@@ -43,13 +56,42 @@ export default class Menu extends Component {
     this.setState({orderDetailsSize: 'Regular'});
   }
 
-  _addToCart = () => {
-    this.props.navigation.navigate('Order', { itemId: [this.state.itemId] });
+  _onOrder = (price) =>{
+    // this.props.navigation.navigate('Order', { itemId: [this.state.itemId], itemPrice: [price] });
+    this.setState({
+      isAddToCart: true
+    })
   }
+
+  hidePopup = () => {
+    this.setState({
+      isAddToCart: false
+    })
+  }
+
+  // _decreaseQuanity = () => {
+  //   if(this.state.itemQuantity == 1)
+  //   {
+  //       this.setState({buttonDisable: true});
+
+  //   }else if(this.state.itemQuantity > 1){
+
+  //       this.setState({buttonDisable: false});
+  //       this.setState({itemQuantity: this.state.itemQuantity - 1});
+  //       this.setState({itemPriceSum: parseInt(this.state.itemPriceSum) - parseInt(this.state.itemPrice) });
+  //   }
+  // }
+
+  // _increaseQuantity = () => {
+  //   this.setState({itemQuantity: this.state.itemQuantity + 1});
+  //   this.setState({buttonDisable: false});
+  //   this.setState({itemPriceSum: parseInt(this.state.itemPriceSum) + parseInt(this.state.itemPrice) });
+  // }
 
   componentDidMount()
   {
     this.setState({menuDetails: apiMenu});
+    this.setState({isAddToCart: false})
   }
   
 
@@ -60,6 +102,7 @@ export default class Menu extends Component {
 
         <Header
           leftComponent={{icon:'arrow-back', color:'#595959', onPress: () => this.props.navigation.goBack()}}
+          // centerComponent={{ text: this.state.restaurantName }}
           rightComponent={{icon: 'notifications', color: '#595959', onPress: () => alert('Hoi')}}
           backgroundColor='transparent'
           outerContainerStyles={{height: RF(6), borderBottomColor: 'transparent', paddingBottom: 3}}
@@ -89,7 +132,7 @@ export default class Menu extends Component {
 
         {
             this.state.menuDetails.map((item, index) => {
-              const url = item.url;
+              {/* const url = item.url; */}
               return (
 
                 <View>
@@ -100,12 +143,12 @@ export default class Menu extends Component {
 
                       <Image 
                         style={{width: width / 3, height: height / 10, resizeMode: 'contain', borderRadius: 10}} 
-                        source={{uri: url }} 
+                        source={{uri: placeholderImg }} 
                       />
 
                       <View style={{width: width / 2.4}}>
                         <Text>{ item.name }</Text>
-                        <Text style={{marginTop: 10, fontSize: RF(3)}}>Rs. 590</Text>
+                        <Text style={{marginTop: 10, fontSize: RF(3)}}>Rs. {item.price}</Text>
                       </View>
 
                     </View>
@@ -114,7 +157,7 @@ export default class Menu extends Component {
 
                       <TouchableOpacity 
                         style={styles.cardViewBtn}
-                        onPress={this._addToCart}
+                        onPress={() => this._onOrder(item.price) }
                       >
                         <Text style={{ fontSize: RF(1.8), color: 'orange' }}>Order</Text>
                       </TouchableOpacity>
@@ -127,6 +170,119 @@ export default class Menu extends Component {
               
               );
             })}
+
+            <Modal 
+              isVisible={this.state.isAddToCart}
+              animationIn="slideInUp"
+              animationOut="slideOutDown">
+
+              <Card containerStyle={{borderRadius: 5}}>
+
+                <View style={{ alignSelf: 'flex-end', marginBottom: 10 }}>
+                  <TouchableOpacity
+                    onPress={this.hidePopup}
+                  >
+                    <Icon 
+                      name="close"
+                    />
+                  </TouchableOpacity>
+                </View>
+
+                <View style={{flexDirection: 'row', marginLeft: 10}}>
+
+                  {/* <Image 
+                    style={{width: width / 3, height: height / 10, resizeMode: 'contain', borderRadius: 10}} 
+                    source={{uri: placeholderImg}} 
+                  /> */}
+
+                  <View style={{width: width / 2.4}}>
+                    <Text style={{ fontSize: RF(2.6) }}>Hot Butter Cuttlefish</Text>
+                    <Text style={{marginTop: 10, fontSize: RF(3)}}>Rs. { this.state.itemPriceSum }</Text>
+                  </View>
+
+                </View>
+
+                <View style={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'}}>
+
+                    <View style={{width: width / 1.4}}>
+
+                      <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 20}}>
+
+                        {/* <Picker
+                          selectedValue={this.state.dayFromPicker}
+                          style={{ width: width / 2.5, fontSize: RF(0.8) }}
+                          onValueChange={(itemValue, itemIndex) =>
+                              this.setState({dayFromPicker: itemValue})
+                          }
+                        >
+                            <Picker.Item label="Pick a size" value="0" />
+                            <Picker.Item label="Regular" value="Regular" />
+                            <Picker.Item label="Large" value="Large" />
+                        </Picker> */}
+
+                        <View style={{flexDirection: 'row', justifyContent:'center', marginLeft: 20}}>
+                          
+                          {
+                            this.state.buttonDisable == true 
+                            
+                            ?  
+
+                            <TouchableOpacity 
+                                style={styles.quantityBtns}
+                                onPress={this._decreaseQuanity}
+                                disabled
+                            >
+                                <Icon name='remove' color='grey'/>
+                            </TouchableOpacity>
+
+                            :
+
+                            <TouchableOpacity 
+                                style={styles.quantityBtns}
+                                onPress={this._decreaseQuanity}
+                            >
+                                <Icon name='remove' color='grey'/>
+                            </TouchableOpacity>
+                          
+                          }
+                        
+
+                          <View style={{ marginHorizontal: 15, justifyContent: 'center', alignItems: 'center', height: 40 }}>
+                            <Text style={{ fontSize: RF(2.5) }}>
+                              { this.state.itemQuantity }
+                            </Text>
+                          </View>
+
+                          <TouchableOpacity 
+                            style={styles.quantityBtns}
+                            onPress={this._increaseQuantity}
+                          >
+                          <Icon name="add" color='grey'/>
+                          </TouchableOpacity>
+
+                        </View>
+
+
+                      </View>
+
+                    </View>
+
+                </View>
+                  
+                <View style={{ alignSelf: 'flex-end' }}>
+
+                    <TouchableOpacity 
+                        style={styles.cardViewBtn}
+                        // onPress={this.hidePopup}
+                    >
+                        <Text style={{ fontSize: RF(1.8), color: 'orange' }}>Add to Cart</Text>
+                    </TouchableOpacity>
+
+                </View>
+
+              </Card>
+
+            </Modal>
 
       </View>
     );

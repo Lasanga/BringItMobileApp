@@ -11,6 +11,8 @@ import apiRest from '../../API/restaurant.json';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
+const placeholderImg = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNbpeefzFuSk86toTbJOCFij7WQpUACtG-5jIZLo_QAdlFmuF5';
+
 export default class Order extends Component {
 
   constructor(props){
@@ -27,13 +29,40 @@ export default class Order extends Component {
     itemId: this.props.navigation.state.params.itemId,
     itemQuantity: 1,
     buttonDisable: true,
-    itemPrice: '',
-    itemPriceSum: ''
+    itemPrice: this.props.navigation.state.params.itemPrice,
+    itemPriceSum: 0,
+    test: 'test',
+    totalCartPrice: 0
 
     };
     
   }
 
+  _addToCart = () => {
+    
+    if(this.state.totalCartPrice != 0)
+    {
+      let total = this.state.totalCartPrice + parseInt(this.state.itemPriceSum);
+      AsyncStorage.setItem('totalPrice', total);
+      // alert(total);      
+    }else {
+      AsyncStorage.setItem('totalPrice', parseInt(this.state.itemPriceSum) );
+      // alert(this.state.itemPriceSum);
+    }
+
+    // if( this.state.itemPriceSum != null)
+    // {
+    //   AsyncStorage.setItem('totalPrice', this.state.itemPriceSum + this.state.itemPrice);
+    // }else{
+    //   AsyncStorage.setItem('totalPrice', this.state.itemPrice);
+    // }
+
+  }
+
+  getTotalPrice = async () => {
+    let totalPrice = await AsyncStorage.getItem('totalPrice');
+    return totalPrice;
+  }
 
   _placeOrderEdit = () => {
     this.setState({orderDetails: true});
@@ -46,6 +75,10 @@ export default class Order extends Component {
   _orderDetailsSize_Regular = () => {
     this.setState({orderDetailsSize: 'Regular'});
   }
+
+  // _addToCart = async () => {
+  //   AsyncStorage.setItem('totalPrice', '20');
+  // }
 
   _decreaseQuanity = () => {
     if(this.state.itemQuantity == 1)
@@ -66,11 +99,33 @@ export default class Order extends Component {
     this.setState({itemPriceSum: parseInt(this.state.itemPriceSum) + parseInt(this.state.itemPrice) });
   }
 
-
   componentDidMount()
   {
-    this.setState({itemPriceSum: '590'});
-    this.setState({itemPrice: '590'});
+    
+    if(parseInt(this.state.itemPriceSum) == 0){
+      this.setState({
+        itemPriceSum: parseInt(this.state.itemPrice)
+      });
+    }else{
+      let total = parseInt(this.state.itemPriceSum) + parseInt(this.state.itemPrice);
+      this.setState({
+        itemPriceSum: total
+      });
+    }
+
+    this.getTotalPrice().then((totalPrice) => {
+      if(totalPrice != null){
+        this.setState({
+          totalCartPrice: JSON.parse(parseInt(totalPrice))
+        });
+      }else {
+        this.setState({
+          totalCartPrice: 0
+        })
+      }
+      
+    })
+
   }
   
 
@@ -95,7 +150,7 @@ export default class Order extends Component {
 
               <Image 
                 style={{width: width / 3, height: height / 10, resizeMode: 'contain', borderRadius: 10}} 
-                source={{uri: 'http://www.pulse.lk/wp-content/uploads/2015/10/IMG_1294.jpg'}} 
+                source={{uri: placeholderImg}} 
               />
 
               <View style={{width: width / 2.4}}>
@@ -176,6 +231,7 @@ export default class Order extends Component {
 
                 <TouchableOpacity 
                     style={styles.cardViewBtn}
+                    onPress={this._addToCart}
                 >
                     <Text style={{ fontSize: RF(1.8), color: 'orange' }}>Add to Cart</Text>
                 </TouchableOpacity>
@@ -186,6 +242,14 @@ export default class Order extends Component {
 
         
         </View>
+
+        <Text>{this.state.totalCartPrice}</Text>
+
+        <TouchableOpacity
+          onPress={this._clearAsync}
+        >
+          <Text>Clear</Text>
+        </TouchableOpacity>
 
 
       </View>

@@ -23,6 +23,7 @@ import Register from '../screens/Auth/Register';
 import Home from '../screens/Home/Home';
 import Menu from '../screens/Home/Menu';
 import Order from '../screens/Home/Order';
+import Cart from '../screens/Home/Cart';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -125,13 +126,14 @@ const Drawer = DrawerNavigator({
 const NavigationApp = StackNavigator({
 
   //UI Navigation Map For All
-  // Splash:{ screen: Splash, navigationOptions: { title: 'SplashScreen', header: null ,gesturesEnabled:false},},
-  // Login:{ screen: Login, navigationOptions: { title: 'Login', header: null ,gesturesEnabled:false},},
-  // Register:{ screen: Register, navigationOptions: { title: 'Register', header: null ,gesturesEnabled:false},},
+  Splash:{ screen: Splash, navigationOptions: { title: 'SplashScreen', header: null ,gesturesEnabled:false},},
+  Login:{ screen: Login, navigationOptions: { title: 'Login', header: null ,gesturesEnabled:false},},
+  Register:{ screen: Register, navigationOptions: { title: 'Register', header: null ,gesturesEnabled:false},},
   Drawer:{ screen: Drawer, navigationOptions: { title: 'Drawer', header: null ,gesturesEnabled:false},},
   Home: { screen: Home, navigationOptions: { title: 'Home', header: null ,gesturesEnabled:false},},
   Menu: { screen: Menu, navigationOptions: { title: 'Menu', header: null ,gesturesEnabled:false},},
   Order: { screen: Order, navigationOptions: { title: 'Order', header: null ,gesturesEnabled:false},},
+  Cart: { screen: Cart, navigationOptions: { title: 'Cart', header: null ,gesturesEnabled:false},},
 
 });
 

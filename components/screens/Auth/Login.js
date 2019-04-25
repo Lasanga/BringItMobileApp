@@ -36,7 +36,7 @@ export default class Login extends Component {
 
           <Image
             source={require('../../assets/images/logo.png')} 
-            style={{width: width / 1.2, height: height / 3.5, resizeMode: 'contain', marginTop: -120}}
+            style={{width: width / 1.2, height: height / 3.5, resizeMode: 'contain', marginTop: -80, marginBottom: 30}}
           />
         
           <TextInput
@@ -129,16 +129,15 @@ const styles = StyleSheet.create({
   },
   textinputs: {
     backgroundColor: 'white',
-    paddingTop: '2%',
-    paddingBottom: '2%',
-    paddingLeft: '4%',
-    paddingRight: '4%',
-    width: '90%',
-    margin: '3%',
+    paddingHorizontal: 15,
+    paddingVertical: 0,
+    width: width / 1.1,
+    margin: 5,
     color: 'grey',
-    height: '8%', 
-    borderBottomColor: 'lightgrey',
-    borderBottomWidth: 1,
+    height: 60, 
+    borderColor: 'lightgrey',
+    borderWidth: 1,
+    borderRadius: 5
   },
   button: {
     width: width / 3.5,
