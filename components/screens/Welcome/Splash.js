@@ -87,8 +87,8 @@ export default class Splash extends Component {
           style={{position: 'absolute', width: width / 1.1, height: height / 3.7, paddingBottom: 15, resizeMode: 'contain'}}
         />
 
-        <Text style={{position: 'absolute', bottom: 40, color: 'grey'}}>BringIT Version 1.0</Text>
-        <Text style={{position: 'absolute', bottom: 20, color: 'grey'}}>Developed by </Text>
+        <Text style={{position: 'absolute', bottom: 40, color: 'white'}}>BringIT Version 1.0</Text>
+        <Text style={{position: 'absolute', bottom: 20, color: 'white'}}>Developed by </Text>
 
        </View>
 
@@ -100,7 +100,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: '#ff0000'
   }
   
 });

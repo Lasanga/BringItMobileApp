@@ -1,12 +1,23 @@
 [
     {
         "id": "1",
-        "name": "Burger King",
-        "url": "https://amp.thisisinsider.com/images/5bbd187101145529745a9895-1920-1440.jpg"
+        "displayName": "Burger King",
+        "city": "Nugegoda",
+        "latitude": "13414",
+        "longitude": "13112"
     },
     {
-        "id": "2",
-        "name": "Mc Donald's",
-        "url": "https://www.mcdonalds.com/content/dam/usa/documents/mcdelivery/mcdelivery_new11.jpg"
+        "id": "1",
+        "displayName": "Mc Donalds",
+        "city": "Dehiwala",
+        "latitude": "13414",
+        "longitude": "13112"
+    },
+    {
+        "id": "1",
+        "displayName": "Pilawoos",
+        "city": "Bambalapitiya",
+        "latitude": "13414",
+        "longitude": "13112"
     }
 ]

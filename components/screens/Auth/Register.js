@@ -13,6 +13,16 @@ export default class Register extends Component {
     super(props);
 
     this.state = {
+
+      username: null,
+      email: null,
+      mobileNumber: null,
+      age: null,
+      password: null,
+      passwordReEntered: null,
+
+      isUserDataEntered: false,
+
     };
     
   }
@@ -25,82 +35,132 @@ export default class Register extends Component {
     alert("Register");
   }
 
+  _onUserDetailEntered = () => {
+
+    if(
+      this.state.username != null && 
+      this.state.email != null && 
+      this.state.mobileNumber != null &&
+      this.state.age != null
+      ){
+
+        this.setState({ isUserDataEntered: true });
+
+      }else{
+
+        alert('enter all');
+
+      }
+
+    
+
+  }
+
   render() {
 
     return (
       <View style={styles.container}>
 
-        <View style={styles.innerContainer}>
+        {/* <View style={styles.innerContainer}> */}
 
           <Image
             source={require('../../assets/images/logo.png')} 
-            style={{width: width / 2.2, height: height / 3.5, resizeMode: 'contain', marginTop: -120}}
-          />
-        
-          {/* <TextInput
-            style={[styles.textinputs, style={marginTop: -20}]}
-            placeholder="Username"
-            placeholderTextColor='grey'
-            // value={this.state.mobileNumber}
-            onChangeText={(text) => this.setState({username:text})}
-
-          /> */}
-
-          {/* <TextInput
-            style={[styles.textinputs, style={marginTop: -10}]}
-            placeholder="Firstname"
-            placeholderTextColor='grey'
-            // value={this.state.mobileNumber}
-            onChangeText={(text) => this.setState({firstname:text})}
-
+            style={{width: width / 2.2, height: height / 3.5, resizeMode: 'contain', marginTop: -100}}
           />
 
-          <TextInput
-            style={styles.textinputs}
-            placeholder="Lastname"
-            placeholderTextColor='grey'
-            // value={this.state.mobileNumber}
-            onChangeText={(text) => this.setState({lastname:text})}
+          {
 
-          />    */}
+            !this.state.isUserDataEntered 
 
-          <TextInput
-            style={styles.textinputs}
-            placeholder="Mobile number"
-            placeholderTextColor='grey'
-            // value={this.state.mobileNumber}
-            onChangeText={(text) => this.setState({mobile:text})}
+            ?
 
-          />    
+            <View>
 
-          <TextInput
-            style={styles.textinputs}
-            placeholder="Password"
-            placeholderTextColor='grey'
-            secureTextEntry={true}
-            // value={this.state.password}
-            onChangeText={(text) => this.setState({password:text})}
-          />
+              <TextInput
+                style={styles.textinputs}
+                placeholder="Username"
+                placeholderTextColor='grey'
+                // value={this.state.mobileNumber}
+                onChangeText={(text) => this.setState({username:text})}
 
-          <TextInput
-            style={styles.textinputs}
-            placeholder="Re-enter Password"
-            placeholderTextColor='grey'
-            secureTextEntry={true}
-            // value={this.state.password}
-            onChangeText={(text) => this.setState({repass:text})}
-          />
+              />
 
-          
-            <View style={{marginLeft: 18, alignItems: 'center', alignSelf: 'center', marginTop: 20}}>
+              <TextInput
+                style={styles.textinputs}
+                placeholder="E-mail Address"
+                placeholderTextColor='grey'
+                keyboardType="email-address"
+                // value={this.state.mobileNumber}
+                onChangeText={(text) => this.setState({email:text})}
+
+              />
+
+              <TextInput
+                style={styles.textinputs}
+                placeholder="Mobile number"
+                placeholderTextColor='grey'
+                keyboardType="phone-pad"
+                // value={this.state.mobileNumber}
+                onChangeText={(text) => this.setState({mobileNumber:text})}
+
+              /> 
+
+              <TextInput
+                style={styles.textinputs}
+                placeholder="Age"
+                placeholderTextColor='grey'
+                keyboardType="numeric"
+                // value={this.state.mobileNumber}
+                onChangeText={(text) => this.setState({age:text})}
+
+              />   
+
+              <View style={{marginLeft: 18, alignItems: 'center', alignSelf: 'center', marginTop: 20}}>
                 <TouchableOpacity 
-                    style={styles.button}
-                    onPress={this._onLoginPressed}
+                  style={[ styles.button, { width: width / 2.5 } ]}
+                  onPress={this._onUserDetailEntered}
                 >
-                    <Text style={{color: '#f5821b', padding: 7, fontSize: 28, fontWeight: 'bold'}}>SIGN UP</Text>
+                  <Text style={{color: '#f5821b', padding: 7, fontSize: 28, fontWeight: 'bold'}}>CONTINUE</Text>
                 </TouchableOpacity>
-          </View>
+              </View> 
 
+            </View>
+
+            :
+
+            <View>
+
+              <TextInput
+                style={styles.textinputs}
+                placeholder="Password"
+                placeholderTextColor='grey'
+                secureTextEntry={true}
+                // value={this.state.password}
+                onChangeText={(text) => this.setState({password:text})}
+              />
+
+              <TextInput
+                style={styles.textinputs}
+                placeholder="Re-enter Password"
+                placeholderTextColor='grey'
+                secureTextEntry={true}
+                // value={this.state.password}
+                onChangeText={(text) => this.setState({repass:text})}
+              />
+              
+              <View style={{marginLeft: 18, alignItems: 'center', alignSelf: 'center', marginTop: 20}}>
+                <TouchableOpacity 
+                  style={styles.button}
+                  onPress={this._onLoginPressed}
+                >
+                  <Text style={{color: '#f5821b', padding: 7, fontSize: 28, fontWeight: 'bold'}}>SIGN UP</Text>
+                </TouchableOpacity>
+              </View>
+
+            </View>
+
+          }
+        
 
           <View style={{flexDirection: 'row', marginTop: 5}}>
             <Text style={{marginTop: '3%'}}>Already a member?</Text>
@@ -116,7 +176,7 @@ export default class Register extends Component {
           <Text style={{alignSelf: 'center',color: 'white'}}>Sign up</Text>
           </TouchableOpacity> */}
 
-        </View>
+        {/* </View> */}
           
 
       </View>
@@ -130,7 +190,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: height,
     width: width,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    justifyContent: 'center'
   },
   screenSize:{
     flex: 1,
@@ -159,14 +220,15 @@ const styles = StyleSheet.create({
   },
   textinputs: {
     backgroundColor: 'white',
-    paddingLeft: '4%',
-    paddingRight: '4%',
-    width: '90%',
-    margin: '2%',
+    paddingHorizontal: 15,
+    paddingVertical: 0,
+    width: width / 1.1,
+    margin: 5,
     color: 'grey',
-    height: '8%', 
-    borderBottomColor: 'lightgrey',
-    borderBottomWidth: 1,
+    height: 60, 
+    borderColor: 'lightgrey',
+    borderWidth: 1,
+    borderRadius: 5
   },
   button: {
     width: width / 3,
