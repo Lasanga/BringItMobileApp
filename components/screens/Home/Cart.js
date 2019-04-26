@@ -138,7 +138,7 @@ export default class Cart extends Component {
                    </ScrollView>
    
 
-                    <View style={{ marginTop: 230 }}>
+                    <View style={{ marginTop: 180 }}>
 
                         <Card>
 
