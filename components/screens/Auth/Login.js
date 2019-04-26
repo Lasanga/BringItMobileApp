@@ -24,8 +24,52 @@ export default class Login extends Component {
   }
 
   _onLoginPressed = () => {
-    this.props.navigation.navigate("Drawer",{screen: "Drawer"});
+
+    var details = {
+      'username': 'admin',
+      'password': '123qwe',
+      'grant_type': 'password'
+    };
+    
+    var formBody = [];
+    for (var property in details) {
+      var encodedKey = encodeURIComponent(property);
+      var encodedValue = encodeURIComponent(details[property]);
+      formBody.push(encodedKey + "=" + encodedValue);
+    }
+    formBody = formBody.join("&");
+
+    var object = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: formBody
+      };
+  
+      fetch("http://aabf6b86.ngrok.io/auth", object)
+      .then((response) => response.json())
+      .then((responseText) => {
+
+        if( responseText.access_token != null )
+        {
+          AsyncStorage.setItem('access_token', responseText.access_token );
+
+          this.props.navigation.navigate('Drawer', {screen: 'Drawer'});
+        }else{
+
+          Alert("Invalid credentials");
+
+        }
+
+  
+      })
+      .catch((error) => {
+        // alert(error);
+      })
+
   }
+
 
   render() {
 
