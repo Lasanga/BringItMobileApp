@@ -7,14 +7,16 @@ Dimensions, AsyncStorage } from 'react-native';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
+import Api from '../../config/ApiLinks';
+
 export default class Login extends Component {
 
   constructor(props){
     super(props);
 
     this.state = {
-      username:'minna123',
-      password:'123'
+      username:'admin',
+      password:'123qwe'
     };
     
   }
@@ -26,10 +28,13 @@ export default class Login extends Component {
   _onLoginPressed = () => {
 
     var details = {
-      'username': 'admin',
-      'password': '123qwe',
-      'grant_type': 'password'
+      'username': this.state.username,
+      'password': this.state.password,
+      'grant_type': "password",
+      'scope': "openid profile api1"
     };
+
+    // alert(details);
     
     var formBody = [];
     for (var property in details) {
@@ -42,30 +47,47 @@ export default class Login extends Component {
     var object = {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+          'Authorization': 'Basic anM6c2VjcmV0'
         },
         body: formBody
       };
   
-      fetch("http://aabf6b86.ngrok.io/auth", object)
+      fetch(Api.authentication, object)
       .then((response) => response.json())
       .then((responseText) => {
 
         if( responseText.access_token != null )
         {
-          AsyncStorage.setItem('access_token', responseText.access_token );
+
+          let access_token = AsyncStorage.getItem('access_token');
+
+          if(access_token != null)
+          {
+            AsyncStorage.removeItem('access_token');
+            AsyncStorage.setItem('access_token', responseText.access_token );
+          }else{
+            AsyncStorage.setItem('access_token', responseText.access_token );
+          }
+          
+          // AsyncStorage.setItem('username', this.state.username);
+          // AsyncStorage.setItem('password', this.state.password);
 
           this.props.navigation.navigate('Drawer', {screen: 'Drawer'});
+
         }else{
 
-          Alert("Invalid credentials");
+          alert(responseText.error);
 
         }
+
+        // alert(responseText.error);
 
   
       })
       .catch((error) => {
-        // alert(error);
+        alert(error);
+        // this.props.navigation.navigate('Splash');
       })
 
   }
