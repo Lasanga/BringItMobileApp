@@ -69,7 +69,6 @@ export default class Home extends Component {
 
   _getCurrentLocation() {
    
-
     navigator.geolocation.getCurrentPosition(
       (position) => {
           this.setState({currentLat: parseFloat(position.coords.latitude)});
@@ -82,8 +81,8 @@ export default class Home extends Component {
   
     );
 
-
   }
+  
 
   _getCurrentLocationName = () => {
 
@@ -134,7 +133,6 @@ export default class Home extends Component {
     setInterval(() => {
       this._getCurrentLocationName();
     }, 3000);
-
   
   }
 
@@ -327,14 +325,11 @@ export default class Home extends Component {
           </View>
         </TouchableOpacity>
 
-        {/* <Spinner
-          //visibility of Overlay Loading Spinner
+        <Spinner
           visible={this.state.loading}
-          //Text with the Spinner 
           textContent={'Loading...'}
-          //Text style of the Spinner Text
           textStyle={styles.spinnerTextStyle}
-        /> */}
+        />
 
 
       </View>

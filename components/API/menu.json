@@ -16,5 +16,12 @@
         "name": "Hot butter cuttlefish pizza",
         "price": 950,
         "qty": 1
+    },
+    {
+        "id": 4,
+        "name": "pizza",
+        "price": 950,
+        "qty": 1
     }
+
 ]

@@ -207,7 +207,10 @@ export default class Cart extends Component {
                                 <Card>
 
                                     <View style={{ flexDirection: 'row' }}>
-                                        <Text style={{ width: width / 1.35, textAlign: 'right', paddingRight: 20 }}>Sub Total</Text>
+                                        <TouchableOpacity>
+                                            <Text>Clear cart</Text>
+                                        </TouchableOpacity>
+                                        <Text style={{ width: width / 1.69, textAlign: 'right', paddingRight: 20 }}>Sub Total</Text>
                                         <Text>Rs. 2450</Text>
                                     </View>
 

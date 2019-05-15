@@ -210,23 +210,26 @@ alert(totalPrice);
             <Picker.Item label="Appetizers" value="Appetizers"/>
             <Picker.Item label="Main" value="Main"/>
           </Picker>
+
           <Button 
             title="Filter Menu" 
             textStyle={{fontSize: RF(2)}}
             buttonStyle={{width: width / 4.2, padding: 3, elevation: 3, borderRadius: 5, backgroundColor: 'orange'}} 
           />
+
           <TouchableOpacity
           onPress={this.getCart}>
             <Text>LOL</Text>
           </TouchableOpacity>
+
         </View>
+
+        <ScrollView style={{ marginBottom: 2 }}>
 
         {
             this.state.menuDetails.map((item, index) => {
               
               return (
-
-                <ScrollView>
 
                   <Card containerStyle={{borderRadius: 5}} key={index}>
 
@@ -257,11 +260,11 @@ alert(totalPrice);
 
                   </Card>
 
-
-                </ScrollView>
                     
               );
             })}
+
+            </ScrollView>
 
             <TouchableOpacity
               style={styles.cartButton}
@@ -275,9 +278,10 @@ alert(totalPrice);
 
             
             <Modal 
-                    isVisible={this.state.isAddToCart}
-                    animationIn="slideInUp"
-                    animationOut="slideOutDown">
+              isVisible={this.state.isAddToCart}
+              animationIn="slideInUp"
+              animationOut="slideOutDown"
+            >
 
                     <Card containerStyle={{borderRadius: 5}}>
 
