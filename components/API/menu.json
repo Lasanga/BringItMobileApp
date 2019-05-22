@@ -3,12 +3,25 @@
         "id": 1,
         "name": "Hot butter cuttlefish",
         "price": 750,
-        "qty": "1"
+        "qty": 1
     },
     {
         "id": 2,
         "name": "Macaroni",
         "price": 850,
-        "qty": 2
+        "qty": 1
+    },
+    {
+        "id": 3,
+        "name": "Hot butter cuttlefish pizza",
+        "price": 950,
+        "qty": 1
+    },
+    {
+        "id": 4,
+        "name": "pizza",
+        "price": 950,
+        "qty": 1
     }
+
 ]
