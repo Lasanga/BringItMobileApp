@@ -58,18 +58,16 @@ const Drawer = DrawerNavigator({
         />
       )
     }
-  // },
-  // "Online Consultation":{
-  //   screen: OnlineConsultation,
-  //   navigationOptions: {
-  //     drawerIcon: ({ tintColor }) => (
-  //       <Image
-  //         source={require("../assets/images/DrawerIcons/active/pillReminder.png")}
-  //         resizeMode="contain"
-  //         style={{ width: 20, height: 20}}
-  //       />
-  //     )
-  //   }
+  },
+  "Past Orders":{
+    screen: Home,
+    navigationOptions: {
+      drawerIcon: ({ tintColor }) => (
+        <Icon
+          name='home'
+        />
+      )
+    }
   // },
   // "Hospital/Pharmacy Locator":{
   //   screen: Locator,

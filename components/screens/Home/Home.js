@@ -360,6 +360,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ff5722',
     borderTopRightRadius: 60,
     borderTopLeftRadius: 60,
+    marginTop: 5,
   },
   spinnerTextStyle:{
     color: 'white'
