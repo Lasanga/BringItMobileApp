@@ -16,7 +16,8 @@ import {
     TouchableHighlight,
     Dimensions,
     ActivityIndicator,
-    AsyncStorage } from 'react-native';
+    AsyncStorage,
+    StatusBar } from 'react-native';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -81,6 +82,7 @@ export default class Splash extends Component {
         source={require('../assets/images/logo.png')}
         style={{width: width / 1.5, height: height/ 8, resizeMode: 'contain'}}
       /> */}
+        <StatusBar backgroundColor="#ff0000" barStyle="light-content" />
          
         <Image 
           source={require('../../assets/images/logo.png')}

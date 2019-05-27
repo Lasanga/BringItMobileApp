@@ -1,9 +1,11 @@
 
-const local = "http://741c2a4a.ngrok.io/";
+const local = "http://368112b2.ngrok.io/";
 
 export default {
 
-    authentication: local + "auth",
-    getRestaurants: local + "restaurants/GetRestaurants"
+  authentication: local + "auth",
+  getRestaurants: local + "restaurants/GetRestaurants",
+  getMenu: local,
+  register: local + "register"
 
-  }
+}

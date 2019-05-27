@@ -53,12 +53,11 @@ export default class Home extends Component {
       currentLat: 0,
       currentLong: 0,
       error: '',
-      currentAddress: 'Getting your location...'
+      currentAddress: 'Fetching your current location... (Please turn on your location if turned off)'
       // refreshing: false,
     };
     
   }
-
 
   // _onRefresh = () => {
   //   this.setState({refreshing: true});
@@ -209,11 +208,11 @@ export default class Home extends Component {
           inputStyle={{backgroundColor: 'lightgrey', borderColor: 'white', borderRadius: 50, marginBottom: 15}}
         /> */}
 
-        <View style={{ flexDirection: 'row', justifyContent: 'center', marginVertical: 10 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', marginVertical: 10, width: width }}>
           <Icon 
             name='place'
           />
-          <Text style={{marginLeft: 10, alignSelf: 'center'}}>{this.state.currentAddress}</Text>
+          <Text style={{marginLeft: 10, alignSelf: 'center', width: width / 1.5}}>{this.state.currentAddress}</Text>
         </View>
 
         
@@ -325,11 +324,11 @@ export default class Home extends Component {
           </View>
         </TouchableOpacity>
 
-        <Spinner
+        {/* <Spinner
           visible={this.state.loading}
           textContent={'Loading...'}
           textStyle={styles.spinnerTextStyle}
-        />
+        /> */}
 
 
       </View>

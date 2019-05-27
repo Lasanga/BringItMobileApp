@@ -7,6 +7,8 @@ Dimensions, AsyncStorage } from 'react-native';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
+import Api from '../../config/ApiLinks';
+
 export default class Register extends Component {
 
   constructor(props){
@@ -20,7 +22,6 @@ export default class Register extends Component {
       age: null,
       password: null,
       passwordReEntered: null,
-
       isUserDataEntered: false,
 
     };
@@ -28,7 +29,34 @@ export default class Register extends Component {
   }
 
   _onRegisterPressed = () => {
-    this.props.navigation.navigate("Login",{screen: "Login"});
+    // this.props.navigation.navigate("Login",{screen: "Login"});
+
+    var object = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // 'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify({
+        UserName: "ozca",
+        EmailAddress: "ozca@bringit.com",
+        Password: "123qwe",
+        Age: "20",
+        VehicleNumber: ""
+      })
+    };
+
+    fetch(Api.register, object)
+    .then((response) => response.json())
+    .then((responseText) => {
+
+      // alert(responseText);
+
+    })
+    .catch((error) => {
+      // alert(error);
+    })
+
   }
 
   _onLoginPressed = () => {
@@ -37,22 +65,20 @@ export default class Register extends Component {
 
   _onUserDetailEntered = () => {
 
-    if(
-      this.state.username != null && 
-      this.state.email != null && 
-      this.state.mobileNumber != null &&
-      this.state.age != null
-      ){
+    // if(
+    //   this.state.username != null && 
+    //   this.state.email != null && 
+    //   this.state.mobileNumber != null &&
+    //   this.state.age != null
+    //   ){
 
         this.setState({ isUserDataEntered: true });
 
-      }else{
+    //   }else{
 
-        alert('enter all');
+    //     alert('enter all');
 
-      }
-
-    
+    //   }
 
   }
 
@@ -145,13 +171,13 @@ export default class Register extends Component {
                 placeholderTextColor='grey'
                 secureTextEntry={true}
                 // value={this.state.password}
-                onChangeText={(text) => this.setState({repass:text})}
+                onChangeText={(text) => this.setState({passwordReEntered:text})}
               />
               
               <View style={{marginLeft: 18, alignItems: 'center', alignSelf: 'center', marginTop: 20}}>
                 <TouchableOpacity 
                   style={styles.button}
-                  onPress={this._onLoginPressed}
+                  onPress={this._onRegisterPressed}
                 >
                   <Text style={{color: '#f5821b', padding: 7, fontSize: 28, fontWeight: 'bold'}}>SIGN UP</Text>
                 </TouchableOpacity>
@@ -165,7 +191,7 @@ export default class Register extends Component {
           <View style={{flexDirection: 'row', marginTop: 5}}>
             <Text style={{marginTop: '3%'}}>Already a member?</Text>
             <Text style={{color: '#f5821b',marginTop: '3%', marginLeft: '1%'}}
-            onPress={this._onRegisterPressed}>Signin here</Text>
+            onPress={this._onLoginPressed}>Signin here</Text>
             {/* this.props.navigation.navigate("Register",{screen: "Register"}); */}
           </View>
 

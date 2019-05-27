@@ -26,6 +26,7 @@ const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
 import apiMenu from '../../API/menu.json';
+// import console = require('console');
 
 const serverErrorImg = "https://cdn2.iconfinder.com/data/icons/databases-and-cloud-technology/48/56-512.png";
 
@@ -40,24 +41,30 @@ export default class Cart extends Component {
             isErrorPopup: false,
             isItemRemove: false,
             isCartEmpty: true,
-            totalCartPrice: '',
+            totalCartPrice: 0,
             itemToRemove_Id: 0
             // isLocalCartConfirmed: false
         }
     }
 
-    removeItem = (id) =>
+    removeItem = (index) =>
     {
-        // alert(id);
-        // this.showAlert();
         this.setState({
-            isItemRemove: true,
-            itemToRemove_Id: id
+            isItemRemove: true, 
+            itemToRemove_Id: index
         });
     }
 
-    confirmRemoveItem = () => {
-        alert(JSON.stringify(this.state.itemToRemove_Id));
+    confirmRemoveItem = async () => {
+        this.state.cartItems.splice(this.state.itemToRemove_Id, 1);
+        AsyncStorage.removeItem('localCart');
+        AsyncStorage.setItem('localCart', JSON.stringify(this.state.cartItems));
+        var items = AsyncStorage.getItem('localCart');
+        // if(items == '[]'){
+        //     this.props.navigation.navigate("Home");
+        // }
+        
+        this.setState({isItemRemove: false});
     }
 
     cancelRemoveItem = () => {
@@ -72,25 +79,9 @@ export default class Cart extends Component {
         return localCartDetails;
       }
 
-    componentDidMount()
-    {
-        // this.setState({ cartItems: apiMenu });
 
-        this._getLocalCartDetails().then((localCartDetails) => {
-            if(localCartDetails != null){
-                this.setState({
-                    cartItems: JSON.parse(localCartDetails),
-                    isCartEmpty: false
-                });
-            }
-           
-        });
-
-        this.getTotalPrice().then((totalPrice) => {
-            // alert(totalPrice);
-        });
-
-
+    _clearCart = () => {
+        AsyncStorage.setItem('localCart', '[]');
     }
 
     _checkoutCart = () => {
@@ -130,6 +121,42 @@ export default class Cart extends Component {
         this.setState({
             isErrorPopup: false
         })
+    }
+
+    _onEmptyCart = async () => 
+    {
+        this.setState({
+            isCartEmpty: true
+        });
+        // AsyncStorage.removeItem({})
+        // AsyncStorage.setItem('totalCartPrice', '0');
+    }
+
+    componentDidMount()
+    {
+        // this.setState({ cartItems: apiMenu });
+
+        this._getLocalCartDetails().then((localCartDetails) => {
+            // alert(localCartDetails);
+            if(localCartDetails != null && localCartDetails != '[]'){
+                this.setState({
+                    cartItems: JSON.parse(localCartDetails),
+                    isCartEmpty: false
+                });
+
+                this.getTotalPrice().then((totalPrice) => {
+                    alert(totalPrice);
+                });
+
+
+            }else{
+                this._onEmptyCart();
+            }
+
+        });
+
+        
+
     }
 
 
@@ -181,7 +208,7 @@ export default class Cart extends Component {
                                         <Card containerStyle={{ marginBottom: 2 }} key={index}>
                                             <View style={{ flexDirection: 'row' }}>
                                             <TouchableOpacity
-                                                onPress={() => this.removeItem(item.itemId) }
+                                                onPress={() => this.removeItem(index) }
                                             >
                                                 <Icon
                                                     name="close"
@@ -207,7 +234,9 @@ export default class Cart extends Component {
                                 <Card>
 
                                     <View style={{ flexDirection: 'row' }}>
-                                        <TouchableOpacity>
+                                        <TouchableOpacity
+                                            onPress={this._clearCart}
+                                        >
                                             <Text>Clear cart</Text>
                                         </TouchableOpacity>
                                         <Text style={{ width: width / 1.69, textAlign: 'right', paddingRight: 20 }}>Sub Total</Text>

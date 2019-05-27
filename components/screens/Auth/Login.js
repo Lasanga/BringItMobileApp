@@ -15,7 +15,7 @@ export default class Login extends Component {
     super(props);
 
     this.state = {
-      username:'admin',
+      username:'ozca',
       password:'123qwe'
     };
     
@@ -48,7 +48,7 @@ export default class Login extends Component {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-          'Authorization': 'Basic anM6c2VjcmV0'
+          'Authorization': 'Basic cmVhY3QtY2xpZW50OmNsaWVudA=='
         },
         body: formBody
       };
@@ -66,11 +66,12 @@ export default class Login extends Component {
           {
             AsyncStorage.removeItem('access_token');
             AsyncStorage.setItem('access_token', responseText.access_token );
+            
           }else{
             AsyncStorage.setItem('access_token', responseText.access_token );
           }
           
-          // AsyncStorage.setItem('username', this.state.username);
+          AsyncStorage.setItem('username', this.state.username);
           // AsyncStorage.setItem('password', this.state.password);
 
           this.props.navigation.navigate('Drawer', {screen: 'Drawer'});

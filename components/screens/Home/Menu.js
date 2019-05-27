@@ -1,5 +1,4 @@
 
-
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, Image,TextInput, TouchableHighlight, Alert, TouchableOpacity,
 Dimensions, AsyncStorage, ScrollView, Picker } from 'react-native';
@@ -8,6 +7,7 @@ import RF from 'react-native-responsive-fontsize';
 import Modal from "react-native-modal";
 
 import apiMenu from '../../API/menu.json';
+import Api from '../../config/ApiLinks';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -21,10 +21,10 @@ export default class Menu extends Component {
 
     this.state = {
 
-      // restaurantName: this.props.navigation.state.params.restaurantName,
-      // restaurantId: this.props.navigation.state.params.restaurantId,
-      restaurantName: 'Pizza Hut',
-      restaurantId: 1,
+      restaurantName: this.props.navigation.state.params.restaurantName,
+      restaurantId: this.props.navigation.state.params.restaurantId,
+      // restaurantName: 'Pizza Hut',
+      // restaurantId: 1,
       filterMenu: '',
       orderDetails: false,
       orderDetailsSize: '',
@@ -62,48 +62,59 @@ export default class Menu extends Component {
     
     const existingItems = await AsyncStorage.getItem('localCart');
     const totalCartPrice = await AsyncStorage.getItem('totalCartPrice');
-    // alert(existingItems);
+    alert(this.state.itemPriceSum);
 
     let newProduct = JSON.parse(existingItems);
     if( !newProduct ){
       newProduct = [];
       newProduct.push( cart );
-      // alert(JSON.stringify(newProduct));
     }else{
-      // newProduct = [];
       newProduct.push( cart );
-      // alert(JSON.stringify(newProduct));
     }
-    // alert(newProduct);
 
     AsyncStorage.setItem('localCart', JSON.stringify(newProduct));
+    AsyncStorage.setItem('totalCartPrice', this.state.itemPriceSum);
 
-    let totalPrice = JSON.parse(totalCartPrice)
-    if( !totalPrice )
-    {
-      totalPrice = 0;
-    }else{
-      totalPrice = totalCartPrice + price;
-    }
-
-alert(totalPrice);
-
-    // AsyncStorage.setItem('totalCartPrice', totalCartPrice);
-
+    this.setState({isAddToCart: false});
 
     // AsyncStorage.setItem('localCart', JSON.stringify(cart));
     // alert(JSON.stringify(cart));
 
   }
 
+  _getMenu (token) {
+// alert('hi');
+    var object = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
+    };
+
+    fetch("http://368112b2.ngrok.io/restaurants/GetByRestaurantId?id=1", object)
+    .then((response) => response.json())
+    .then((responseText) => {
+
+      alert(JSON.parse(responseText.list));
+      // this.setState({menuDetails: responseText});
+
+    })
+    .catch((error) => {
+      alert(error);
+    })
+
+
+  }
+
   getTotalPrice = async () => {
-    let totalPrice = await AsyncStorage.getItem('totalPrice');
+    let totalPrice = await AsyncStorage.getItem('totalCartPrice');
     return totalPrice;
   }
 
   getCart = async () => {
     let test = await AsyncStorage.getItem('localCart');
-    alert(test);
+    return totalPrice
   }
 
 
@@ -173,10 +184,19 @@ alert(totalPrice);
     this.setState({itemPriceSum: parseInt(this.state.itemPriceSum) + parseInt(this.state.itemPrice) });
   }
 
+  _getAccessToken = async () => {
+    let access_token = await AsyncStorage.getItem('access_token');
+    return access_token;
+  }
+
   componentDidMount()
   {
     this.setState({menuDetails: apiMenu});
     this.setState({isAddToCart: false});
+
+    this._getAccessToken().then((access_token) => {
+      this._getMenu(access_token);
+    })
   }
   
 
@@ -199,7 +219,7 @@ alert(totalPrice);
             </Text>
         </View>
 
-        <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+        {/* <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
           <Picker
             selectedValue={this.state.filterMenu}
@@ -222,7 +242,7 @@ alert(totalPrice);
             <Text>LOL</Text>
           </TouchableOpacity>
 
-        </View>
+        </View> */}
 
         <ScrollView style={{ marginBottom: 2 }}>
 
